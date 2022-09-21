@@ -1,4 +1,4 @@
 version: 2.1
 
 orbs:
-  queue: eddiewebb/queue@1.1.2
+  slack: circleci/slack@4.10.1
