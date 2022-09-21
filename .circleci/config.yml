@@ -3,30 +3,31 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.10.1
 
-jobs:
-  notify:
+executors:
+  # executors
+  # [go_base] :
+  # - docker
+  # の job で使われている。
+  go_base:
     docker:
-      - image: 'cimg/base:stable'
+      - image: golang:latest
+
+jobs:
+  go_build: # job名
+    executor: progate_base # executor名
     steps:
-      - slack/notify:
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
-          event: always
+      - checkout
+      - run:
+          name: go build
+          command: go build -o main
+      - store_artifacts:
+          path: main
+          destination: main
+      - persist_to_workspace:
+          root: .
+          paths:
+            - main
 workflows:
   send-notification:
     jobs:
-      - notifys:
-          context: slack-secrets
+      - go_build:
