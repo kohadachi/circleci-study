@@ -10,11 +10,11 @@ executors:
   # の job で使われている。
   go_base:
     docker:
-      - image: golang:latest
+      - image: circleci/golang:1.16-stretch-node-browsers-legacy
 
 jobs:
   go_build: # job名
-    executor: progate_base # executor名
+    executor: go_base # executor名
     steps:
       - checkout
       - run:
@@ -28,6 +28,6 @@ jobs:
           paths:
             - main
 workflows:
-  send-notification:
+  go-build:
     jobs:
       - go_build:
