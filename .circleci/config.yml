@@ -1,0 +1,33 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@4.10.1
+
+executors:
+  # executors
+  # [go_base] :
+  # - docker
+  # の job で使われている。
+  go_base:
+    docker:
+      - image: circleci/golang:1.16-stretch-node-browsers-legacy
+
+jobs:
+  go_build: # job名
+    executor: go_base # executor名
+    steps:
+      - checkout
+      - run:
+          name: go build
+          command: go build -o main
+      - store_artifacts:
+          path: main
+          destination: main
+      - persist_to_workspace:
+          root: .
+          paths:
+            - main
+workflows:
+  go-build:
+    jobs:
+      - go_build:
